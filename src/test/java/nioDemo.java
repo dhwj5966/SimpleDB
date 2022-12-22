@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 /**
@@ -9,8 +11,8 @@ import java.nio.channels.FileChannel;
 public class nioDemo {
     public static void main(String[] args) {
         //对NIO操作文件进行一些复习,FileChannel,ByteBuffer
-        System.exit(1);
-        System.out.println("bingo");
+
+
 
     }
 }
