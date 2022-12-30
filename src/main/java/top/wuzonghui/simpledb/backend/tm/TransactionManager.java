@@ -39,7 +39,7 @@ public interface TransactionManager {
     //查询一个事务的状态是否是active
     boolean isActive(long xid);
     //查询一个事务是否已提交
-    boolean isCommited(long xid);
+    boolean isCommitted(long xid);
     //查询一个事务是否已取消
     boolean isAborted(long xid);
     //关闭TM
@@ -55,7 +55,7 @@ public interface TransactionManager {
         try {
             //无法创建则报错
             if(!f.createNewFile()) {
-                Panic.panic(Error.FileNotExistsException);
+                Panic.panic(Error.FileExistsException);
             }
         } catch (Exception e) {
             Panic.panic(e);

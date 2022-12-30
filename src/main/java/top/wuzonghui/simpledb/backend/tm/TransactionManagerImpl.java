@@ -182,7 +182,7 @@ public class TransactionManagerImpl implements TransactionManager{
     }
 
     @Override
-    public boolean isCommited(long xid) {
+    public boolean isCommitted(long xid) {
         return checkXIDIsStatus(xid, FIELD_TRAN_COMMITTED);
     }
 
@@ -203,8 +203,7 @@ public class TransactionManagerImpl implements TransactionManager{
         } catch (IOException e) {
             Panic.panic(e);
         }
-        byte b = buffer.get();
-        return b == status;
+        return buffer.array()[0] == status;
     }
 
     @Override
