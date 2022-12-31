@@ -178,16 +178,19 @@ public class TransactionManagerImpl implements TransactionManager{
 
     @Override
     public boolean isActive(long xid) {
+        if(xid == SUPER_XID) return false;
         return checkXIDIsStatus(xid, FIELD_TRAN_ACTIVE);
     }
 
     @Override
     public boolean isCommitted(long xid) {
+        if(xid == SUPER_XID) return true;
         return checkXIDIsStatus(xid, FIELD_TRAN_COMMITTED);
     }
 
     @Override
     public boolean isAborted(long xid) {
+        if(xid == SUPER_XID) return true;
         return checkXIDIsStatus(xid, FIELD_TRAN_ABORTED);
     }
 

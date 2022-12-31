@@ -79,7 +79,7 @@ public class PageX {
      * @return
      */
     public static int getFreeSpace(Page pg) {
-        return PageCache.PAGE_SIZE - getFSO(pg);
+        return PageCache.PAGE_SIZE - (int) getFSO(pg);
     }
 
     /**

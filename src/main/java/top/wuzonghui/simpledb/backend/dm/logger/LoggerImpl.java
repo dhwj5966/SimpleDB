@@ -172,6 +172,7 @@ public class LoggerImpl implements Logger{
         byte[] log = null;
         try {
             ByteBuffer logBuffer = ByteBuffer.allocate(8 + size);
+            fileChannel.position(position);
             fileChannel.read(logBuffer);
             log = logBuffer.array();
         } catch (IOException e) {

@@ -74,9 +74,9 @@ public interface DataManager {
      */
     static DataManager open(String path, long memory, TransactionManager tm) {
         //快速创建PageCache对象。
-        PageCache pageCache = PageCache.create(path, memory);
+        PageCache pageCache = PageCache.open(path, memory);
         //快速创建Logger对象。
-        Logger logger = Logger.create(path);
+        Logger logger = Logger.open(path);
 
         DataManagerImpl dataManager = new DataManagerImpl(pageCache, logger, tm);
         //如果第一页的校验和不满足,则证明需要调用恢复例程

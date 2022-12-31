@@ -8,6 +8,10 @@ package top.wuzonghui.simpledb.backend.dm.page;
 public interface Page {
     void lock();
     void unlock();
+
+    /**
+     * 从内存中释放该页，调用管理该页的PageCache进行释放。
+     */
     void release();
     void setDirty(boolean dirty);
     boolean isDirty();

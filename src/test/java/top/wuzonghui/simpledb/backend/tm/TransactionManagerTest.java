@@ -1,7 +1,6 @@
-package top.guoziyang.mydb.backend.tm;
+package top.wuzonghui.simpledb.backend.tm;
 
 import org.junit.Test;
-import top.wuzonghui.simpledb.backend.tm.TransactionManager;
 
 import java.io.File;
 import java.security.SecureRandom;
@@ -30,6 +29,9 @@ public class TransactionManagerTest {
     private Map<Long, Byte> transMap;
     private CountDownLatch cdl;
 
+    /**
+     *
+     */
     @Test
     public void testMultiThread() {
         //调用TransactionManager类的create静态方法，创建xid文件，并获取TransactionManager对象。

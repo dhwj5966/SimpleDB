@@ -157,7 +157,9 @@ public class Recover {
                     if (map.containsKey(xid)) {
                         map.get(xid).add(log);
                     } else {
-                        map.put(xid, Arrays.asList(log));
+                        List<byte[]> list = new ArrayList<>();
+                        list.add(log);
+                        map.put(xid, list);
                     }
                 }
             } else {
@@ -168,7 +170,9 @@ public class Recover {
                     if (map.containsKey(xid)) {
                         map.get(xid).add(log);
                     } else {
-                        map.put(xid, Arrays.asList(log));
+                        List<byte[]> list = new ArrayList<>();
+                        list.add(log);
+                        map.put(xid, list);
                     }
                 }
             }
@@ -244,7 +248,7 @@ public class Recover {
         UpdateLogInfo li = new UpdateLogInfo();
         li.xid = Parser.parseLong(Arrays.copyOfRange(log, OF_XID, OF_UPDATE_UID));
         long uid = Parser.parseLong(Arrays.copyOfRange(log, OF_UPDATE_UID, OF_UPDATE_RAW));
-        //uid占位8字节，其中48-64字节是offset，0-32字节是pgno。话说这样的意义是啥。。感觉很蠢
+        //uid占位8字节，其中48-64字节是offset，0-32字节是pgno。
         short offset = (short) (uid & ((1L << 16) - 1));
         li.offset = offset;
         uid >>>= 32;
@@ -252,8 +256,8 @@ public class Recover {
         li.pgno = pgno;
         //将剩下的长度一分为二，一半是oldRaw，一半是newRaw
         int length = (log.length - OF_UPDATE_RAW) / 2;
-        li.oldRaw = Arrays.copyOfRange(log, OF_INSERT_RAW, OF_INSERT_RAW + length);
-        li.newRaw = Arrays.copyOfRange(log, OF_INSERT_RAW + length, OF_INSERT_RAW + length * 2);
+        li.oldRaw = Arrays.copyOfRange(log, OF_UPDATE_RAW, OF_UPDATE_RAW + length);
+        li.newRaw = Arrays.copyOfRange(log, OF_UPDATE_RAW + length, OF_UPDATE_RAW + length * 2);
         return li;
     }
 
@@ -329,7 +333,11 @@ public class Recover {
     }
 
 
-    //根据byte数组的第一位，判断当前byte数组代表insert log还是update log
+    /**
+     * 根据byte数组的第一位，判断当前byte数组代表insert log还是update log
+     * @param log
+     * @return
+     */
     private static boolean isInsertLog(byte[] log) {
         return log[0] == LOG_TYPE_INSERT;
     }

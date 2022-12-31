@@ -1,6 +1,4 @@
-package top.guoziyang.mydb.backend.tm;
-
-import top.wuzonghui.simpledb.backend.tm.TransactionManager;
+package top.wuzonghui.simpledb.backend.tm;
 
 public class MockTransactionManager implements TransactionManager {
 

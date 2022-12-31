@@ -124,7 +124,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache{
 
     @Override
     public Page getPage(int pgno) throws Exception {
-        return get(pgno);
+        return get((long)pgno);
     }
 
     @Override
@@ -140,12 +140,12 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache{
 
     @Override
     public void release(Page page) {
-        release(page.getPageNumber());
+        release((long) page.getPageNumber());
     }
 
     @Override
     public void truncateByBgno(int maxPgno) {
-        long size = PageCacheImpl.pageOffset(maxPgno);
+        long size = PageCacheImpl.pageOffset(maxPgno + 1);
         try {
             file.setLength(size);
         } catch (Exception e){

@@ -55,7 +55,7 @@ public class DataManagerImpl extends AbstractCache<DataItem> implements DataMana
     public DataItem read(long uid) throws Exception {
         //调用get方法，通过缓存读。
         DataItemImpl dataItem = (DataItemImpl) super.get(uid);
-        if (dataItem.isValid()) {
+        if (!dataItem.isValid()) {
             dataItem.release();
             return null;
         }
@@ -129,9 +129,9 @@ public class DataManagerImpl extends AbstractCache<DataItem> implements DataMana
     @Override
     protected DataItem getForCache(long key) throws Exception {
         //key 前四位是pgno，后四位是offset
-        short offset = (short) (key & ((1 << 16) - 1));
+        short offset = (short) (key & ((1L << 16) - 1));
         key >>>= 32;
-        int pgno = (int) (key & ((1 << 32) - 1));
+        int pgno = (int) (key & ((1L << 32) - 1));
         Page page = pageCache.getPage(pgno);
         return DataItem.parseDataItem(page, offset, this);
     }
@@ -174,10 +174,11 @@ public class DataManagerImpl extends AbstractCache<DataItem> implements DataMana
         byte[] pageOneBytes = PageOne.InitRaw();
         int pageOneNo = pageCache.newPage(pageOneBytes);
         //将第一页加载到缓存中，并且注入pageOne字段。
+        assert pageOneNo == 1;
         try {
             this.pageOne = pageCache.getPage(pageOneNo);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Panic.panic(e);
         }
         //直接将第一页刷入到文件系统中。
         pageCache.flushPage(pageOne);

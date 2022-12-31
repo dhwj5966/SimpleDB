@@ -80,7 +80,7 @@ public class PageOne {
      * @return
      */
     private static boolean checkVc(byte[] raw) {
-        return Arrays.equals(raw, OF_VC, OF_VC + LEN_VC + 1, raw, OF_VC + LEN_VC, OF_VC + LEN_VC * 2 + 1);
+        return Arrays.equals(Arrays.copyOfRange(raw, OF_VC, OF_VC+LEN_VC), Arrays.copyOfRange(raw, OF_VC+LEN_VC, OF_VC+2*LEN_VC));
     }
 
 

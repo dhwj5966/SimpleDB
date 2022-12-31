@@ -35,7 +35,7 @@ public class PageIndex {
     public PageIndex() {
         lock = new ReentrantLock();
         lists = new List[INTERVALS_NO+1];
-        for (int i = 0; i < INTERVALS_NO+1; i ++) {
+        for (int i = 0; i < INTERVALS_NO+1; i++) {
             lists[i] = new ArrayList<>();
         }
     }
@@ -51,7 +51,7 @@ public class PageIndex {
             int index = spaceSize / THRESHOLD;
             if (index < INTERVALS_NO) index++;
             while (true) {
-                if (index >= lists.length) {
+                if (index > INTERVALS_NO) {
                     return null;
                 }
                 List<PageInfo> list = lists[index];

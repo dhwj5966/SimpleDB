@@ -20,7 +20,7 @@ import java.util.Arrays;
  */
 public interface DataItem {
     /**
-     * 通过该方法可以获取该DataItem对象的Data部分。由于该方法返回的数组是数据共享的，而不是拷贝的，所有使用SubArray。
+     * 通过该方法可以获取该DataItem对象的Data部分。由于该方法返回的数组是数据共享的，而不是拷贝的，所以使用SubArray。
      */
     SubArray data();
 
@@ -122,6 +122,8 @@ public interface DataItem {
         long u1 = (long) offset;
         return u0 << 32 | u1;
     }
+
+
 
     /**
      * 工具方法，根据page，offset，dataManager，封装DataItem对象。

@@ -51,7 +51,7 @@ public interface TransactionManager {
      * @return
      */
     public static TransactionManager create(String path) {
-        File f = new File(path+TransactionManagerImpl.XID_SUFFIX);
+        File f = new File(path + TransactionManagerImpl.XID_SUFFIX);
         try {
             //无法创建则报错
             if(!f.createNewFile()) {

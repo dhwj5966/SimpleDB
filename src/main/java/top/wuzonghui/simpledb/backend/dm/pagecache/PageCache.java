@@ -91,7 +91,7 @@ public interface PageCache {
         } catch (FileNotFoundException e) {
             Panic.panic(e);
         }
-        return new PageCacheImpl(randomAccessFile, fileChannel, (int) (memory / PageCache.PAGE_SIZE));
+        return new PageCacheImpl(randomAccessFile, fileChannel, (int) memory / PageCache.PAGE_SIZE);
     }
 
     /**
@@ -103,8 +103,8 @@ public interface PageCache {
     public static PageCache open(String path, long memory) {
         //合法性检验有所不同。 1.文件是否存在 2.文件是否可以读写
         File file = new File(path + PageCacheImpl.DB_SUFFIX);
-        if (file.exists()) {
-            Panic.panic(Error.FileExistsException);
+        if (!file.exists()) {
+            Panic.panic(Error.FileNotExistsException);
         }
         if (!file.canRead() || !file.canWrite()) {
             Panic.panic(Error.FileCannotRWException);
@@ -117,6 +117,6 @@ public interface PageCache {
         } catch (FileNotFoundException e) {
             Panic.panic(e);
         }
-        return new PageCacheImpl(randomAccessFile, fileChannel, (int) (memory / PageCache.PAGE_SIZE));
+        return new PageCacheImpl(randomAccessFile, fileChannel, (int) memory / PageCache.PAGE_SIZE);
     }
 }
