@@ -142,7 +142,11 @@ public class TransactionManagerImpl implements TransactionManager{
         }
     }
 
-    //将指定xid的事务的状态改为status，即将文件对应位置的数值修改为status
+    /**
+     * 将指定xid的事务的状态改为status，即将文件对应位置的数值修改为status。
+     * @param xid
+     * @param status
+     */
     private void updateFileByXIDAndStatus(long xid, byte status) {
         //偏移量
         long offset = getXidPosition(xid);

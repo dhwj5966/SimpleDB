@@ -2,6 +2,7 @@ package top.wuzonghui.simpledb.backend.vm;
 
 import com.google.common.primitives.Bytes;
 import top.wuzonghui.simpledb.backend.common.SubArray;
+import top.wuzonghui.simpledb.backend.dm.DataManager;
 import top.wuzonghui.simpledb.backend.dm.dataitem.DataItem;
 import top.wuzonghui.simpledb.backend.utils.Parser;
 
@@ -37,7 +38,7 @@ public class Entry {
     private static final int OF_DATA = OF_XMAX+8;
 
     /**
-     *
+     * Entry的uid。和Entry所在的dataItem的uid一致。
      */
     private long uid;
 
@@ -54,8 +55,8 @@ public class Entry {
     /**
      * 创建一个新的Entry对象
      * @param vm 操作该Entry对象的VersionManager对象
-     * @param dataItem
-     * @param uid
+     * @param dataItem 该Entry所处的dataItem对象
+     * @param uid 该Entry的uid
      * @return 创建的Entry对象
      */
     public static Entry newEntry(VersionManager vm, DataItem dataItem, long uid) {
@@ -147,7 +148,7 @@ public class Entry {
 
     /**
      * 获取该条Entry的XMAX部分。
-     * @return XMAX代表删除该条Entry的事务编号。
+     * @return XMAX代表删除该条Entry的事务编号。如果是0表示该记录没有被删除。
      */
     public long getXmax() {
         dataItem.rLock();
@@ -165,13 +166,20 @@ public class Entry {
     }
 
 
-    //
-    public static Entry loadEntry(VersionManager vm, long uid) throws Exception {
-
-        return null;
+    /**
+     * 根据VersionManager对象，以及uid，加载一个新的Entry。
+     * @param versionManager 管理Entry的VersionManager对象
+     * @param uid Entry的uid。根据该uid，可以解析出Entry所处DataItem的位置(pageno、offset)。
+     * @return Entry对象。
+     * @throws Exception
+     */
+    public static Entry loadEntry(VersionManager versionManager, long uid) throws Exception {
+        //将vm对象强转成VersionManagerImpl对象。本数据库的vm对象皆是VersionManagerImpl对象，因此可以强转。
+        VersionManagerImpl versionManagerImpl = (VersionManagerImpl) versionManager;
+        //拿到VersionManagerImpl对象的dataManager字段。
+        DataManager dataManager = versionManagerImpl.dataManager;
+        //通过DataManager和uid读出Entry所在的dataItem。
+        DataItem dataItem = dataManager.read(uid);
+        return newEntry(versionManager, dataItem, uid);
     }
-
-
-
-
 }
