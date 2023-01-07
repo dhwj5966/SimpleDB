@@ -1,6 +1,9 @@
 package top.wuzonghui.simpledb.backend.utils;
 
+import com.google.common.primitives.Bytes;
+
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * @author Starry
@@ -65,5 +68,39 @@ public class Parser {
     public static byte[] int2Byte(int value) {
         return ByteBuffer.allocate(4).putInt(value).array();
     }
+
+    /**
+     * 解析字符串。
+     * @param raw 待解析的字节数组。
+     * @return ParseStringRes对象，包括String和next，next指明了下一个string的offset。
+     */
+    public static ParseStringRes parseString(byte[] raw) {
+        int stringLength = parseInt(Arrays.copyOfRange(raw, 0, 4));
+        String s = new String(Arrays.copyOfRange(raw, 4, 4 + stringLength));
+        return new ParseStringRes(s, stringLength + 4);
+    }
+
+    /**
+     * 根据str生成字节数组。格式为[strLength,4byte][str.getBytes()]
+     * @param str 待生成数据的字符串。
+     * @return 根据str生成的字节数组。
+     */
+    public static byte[] string2Byte(String str) {
+        byte[] l = int2Byte(str.length());
+        return Bytes.concat(l, str.getBytes());
+    }
+
+    /**
+     * @Describe 将string类型转换为long类型。
+     */
+    public static long str2Uid(String key) {
+        long seed = 13331;
+        long res = 0;
+        for(byte b : key.getBytes()) {
+            res = res * seed + (long)b;
+        }
+        return res;
+    }
+
 
 }

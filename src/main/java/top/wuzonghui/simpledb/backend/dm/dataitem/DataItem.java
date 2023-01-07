@@ -20,12 +20,12 @@ import java.util.Arrays;
  */
 public interface DataItem {
     /**
-     * 通过该方法可以获取该DataItem对象的Data部分。由于该方法返回的数组是数据共享的，而不是拷贝的，所以使用SubArray。
+     * @Describe 通过该方法可以获取该DataItem对象的Data部分。由于该方法返回的数组是数据共享的，而不是拷贝的，所以使用SubArray。
      */
     SubArray data();
 
     /**
-     * 修改DataItem前，需要调用该方法。
+     * @Describe 修改DataItem前，需要调用该方法。
      * 具体操作：
      * 1.开启写锁
      * 2.将DataItem所处的Page的dirty字段设置为true
@@ -34,7 +34,7 @@ public interface DataItem {
     void before();
 
     /**
-     * 如果要撤销修改，则要调用该方法。
+     * @Describe 如果要撤销修改，则要调用该方法。
      * 具体操作：
      * 1.释放写锁
      * 2.将临时数组里的数据复制回原数据位置
@@ -42,7 +42,7 @@ public interface DataItem {
     void unBefore();
 
     /**
-     * 修改完成后需要调用该方法。
+     * @Describe 修改完成后需要调用该方法。
      * 具体操作：
      * 1.记录日志
      * 2.释放写锁
@@ -52,57 +52,57 @@ public interface DataItem {
     void after(long xid);
 
     /**
-     * 从内存中释放当前DataItem，注意：如果还有其他引用，则还会存在在缓存中。
+     * @Describe 从内存中释放当前DataItem，注意：如果还有其他引用，则还会存在在缓存中。
      */
     void release();
 
     /**
-     * 获取该DataItem的写锁。
+     * @Describe 获取该DataItem的写锁。
      */
     void lock();
 
     /**
-     * 释放该DataItem的写锁。
+     * @Describe 释放该DataItem的写锁。
      */
     void unlock();
 
     /**
-     * 获取该DataItem的读锁。
+     * @Describe 获取该DataItem的读锁。
      */
     void rLock();
 
     /**
-     * 释放该DataItem的读锁。
+     * @Describe 释放该DataItem的读锁。
      */
     void rUnLock();
 
     /**
-     * 获取该DataItem所在的Page对象。
+     * @Describe 获取该DataItem所在的Page对象。
      */
     Page page();
 
     /**
-     * 获取该DataItem的uid(即DataItem的id)。
+     * @Describe 获取该DataItem的uid(即DataItem的id)。
      *
      * @return
      */
     long getUid();
 
     /**
-     * 获取OldRaw字段。oldRaw字段是一个临时数组，在修改数据的时候，将旧数据存储到临时数组里，以便撤销。
+     * @Describe 获取OldRaw字段。oldRaw字段是一个临时数组，在修改数据的时候，将旧数据存储到临时数组里，以便撤销。
      *
      * @return
      */
     byte[] getOldRaw();
 
     /**
-     * 获取Raw字段，Raw字段是DataItem的数据部分，
+     * @Describe 获取Raw字段，Raw字段是DataItem的数据部分，
      * 包括[ValidFlag,1byte],[DataSize,2byte],[Data]。 封装成SubArray的目的是让多个DataItem可以操作同一个byte[]的不同部分。
      */
     SubArray getRaw();
 
     /**
-     * 将byte[] raw的index为0的位设置为1，说明该DataItem数据已经被逻辑删除。
+     * @Describe 将byte[] raw的index为0的位设置为1，说明该DataItem数据已经被逻辑删除。
      *
      * @param raw
      */
@@ -111,7 +111,7 @@ public interface DataItem {
     }
 
     /**
-     * 根据int值pgno和short值offset，拼接成8字节的uid，其中前4个字节是pgno，后4个字节是offset
+     * @Describe 根据int值pgno和short值offset，拼接成8字节的uid，其中前4个字节是pgno，后4个字节是offset
      *
      * @param pgno
      * @param offset
@@ -126,7 +126,7 @@ public interface DataItem {
 
 
     /**
-     * 工具方法，根据page，offset，dataManager，封装DataItem对象。
+     * @Describe 工具方法，根据page，offset，dataManager，封装DataItem对象。
      *
      * @param page
      * @param offset
@@ -151,7 +151,7 @@ public interface DataItem {
     }
 
     /**
-     * DataItem中数据的存储格式：[ValidFlag,1byte],[DataSize,2byte],[Data]。
+     * @Describe DataItem中数据的存储格式：[ValidFlag,1byte],[DataSize,2byte],[Data]。
      * 根据传入的DataItem的Data，封装一个DataItem格式的信息。
      * 比如传入[2,4,7,1],则返回[0,0,4,2,4,7,1]
      *
