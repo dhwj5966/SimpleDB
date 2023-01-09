@@ -119,7 +119,7 @@ public class Recover {
         if(maxPgno == 0) {
             maxPgno = 1;
         }
-        pc.truncateByBgno(maxPgno);
+        pc.truncateByPgno(maxPgno);
         System.out.println("Truncate to " + maxPgno + " pages.");
 
 

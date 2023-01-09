@@ -115,7 +115,7 @@ public class Entry {
      * 释放该条Entry，由VM实现。
      */
     public void release() {
-
+        ((VersionManagerImpl)vm).releaseEntry(this);
     }
 
     /**

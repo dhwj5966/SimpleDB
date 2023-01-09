@@ -47,7 +47,7 @@ public class MockPageCache implements PageCache {
     public void release(Page page) {}
 
     @Override
-    public void truncateByBgno(int maxPgno) {}
+    public void truncateByPgno(int maxPgno) {}
 
     @Override
     public int getPageNumber() {

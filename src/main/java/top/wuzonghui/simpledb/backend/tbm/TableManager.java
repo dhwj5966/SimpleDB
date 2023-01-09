@@ -36,7 +36,6 @@ public interface TableManager {
     /**
      * 返回所有表信息。
      * @param xid
-     * @return
      */
     byte[] show(long xid);
 

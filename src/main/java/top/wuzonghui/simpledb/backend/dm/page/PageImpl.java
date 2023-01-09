@@ -38,9 +38,6 @@ public class PageImpl implements Page{
 
     /**
      * PageImpl的构造方法，需要传入Page的页号，实际包含的数据，以及当前Page所处的缓冲区
-     * @param pageNumber
-     * @param data
-     * @param pc
      */
     public PageImpl(int pageNumber, byte[] data, PageCache pc) {
         this.pageNumber = pageNumber;

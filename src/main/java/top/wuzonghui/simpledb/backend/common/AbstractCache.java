@@ -72,7 +72,7 @@ public abstract class AbstractCache<T> {
             if (cache.containsKey(key)) {
                 lock.unlock();
                 T value = cache.get(key);
-                //获取数据不要忘了更新该资源的引用技术
+                //获取数据不要忘了更新该资源的引用计数
                 references.put(key, references.get(key) + 1);
                 return value;
             }

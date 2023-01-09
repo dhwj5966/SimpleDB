@@ -20,6 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class TransactionManagerImpl implements TransactionManager{
 
+
     //XID文件头长度
     static final int LEN_XID_HEADER_LENGTH = 8;
     // 每个事务的占用长度
@@ -30,7 +31,7 @@ public class TransactionManagerImpl implements TransactionManager{
     private static final byte FIELD_TRAN_COMMITTED = 1;
     private static final byte FIELD_TRAN_ABORTED  = 2;
 
-    // 超级事务，永远为commited状态
+    // 超级事务，永远为committed状态
     public static final long SUPER_XID = 0;
 
     static final String XID_SUFFIX = ".xid";
@@ -115,8 +116,8 @@ public class TransactionManagerImpl implements TransactionManager{
         counterLock.lock();
         try {
             long xid = xidCounter + 1;
-            incrXidCounter();
             updateFileByXIDAndStatus(xid, FIELD_TRAN_ACTIVE);
+            incrXidCounter();
             return xid;
         } finally {
             counterLock.unlock();
@@ -194,7 +195,7 @@ public class TransactionManagerImpl implements TransactionManager{
 
     @Override
     public boolean isAborted(long xid) {
-        if(xid == SUPER_XID) return true;
+        if(xid == SUPER_XID) return false;
         return checkXIDIsStatus(xid, FIELD_TRAN_ABORTED);
     }
 

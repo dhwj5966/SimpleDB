@@ -91,7 +91,6 @@ public class BPlusTree {
         }
     }
 
-    //*************************以下为核心方法*************************
 
     /**
      * 根据指定key，搜索数据。
@@ -150,7 +149,6 @@ public class BPlusTree {
         bootDataItem.release();
     }
 
-    //*************************以上为核心方法*************************
 
     /**
      * @Describe 更新bootDataItem中根节点的uid。

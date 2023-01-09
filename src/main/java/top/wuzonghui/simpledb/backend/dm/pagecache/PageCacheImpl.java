@@ -144,7 +144,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache{
     }
 
     @Override
-    public void truncateByBgno(int maxPgno) {
+    public void truncateByPgno(int maxPgno) {
         long size = PageCacheImpl.pageOffset(maxPgno + 1);
         try {
             file.setLength(size);
@@ -160,7 +160,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache{
     }
 
     /**
-     * 将paged的数据写入文件中
+     * 将page的数据写入文件中
      * @param pg
      */
     @Override

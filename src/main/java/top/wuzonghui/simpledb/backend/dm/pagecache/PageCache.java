@@ -50,7 +50,7 @@ public interface PageCache {
      *  如果调用该方法并传入8，则只能保留8个数据页，文件大小被截断为64K。
      * @param maxPgno
      */
-    void truncateByBgno(int maxPgno);
+    void truncateByPgno(int maxPgno);
 
     /**
      * 获取当前缓存对应的数据库文件拥有的总页数
