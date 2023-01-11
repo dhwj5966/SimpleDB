@@ -70,10 +70,10 @@ public abstract class AbstractCache<T> {
             }
             //如果key不在getting中，那么就尝试从缓存中获取
             if (cache.containsKey(key)) {
-                lock.unlock();
                 T value = cache.get(key);
                 //获取数据不要忘了更新该资源的引用计数
                 references.put(key, references.get(key) + 1);
+                lock.unlock();
                 return value;
             }
             //如果key既不在getting中，也不在缓存中，那么就需要去硬盘中get,去硬盘中取放到循环外

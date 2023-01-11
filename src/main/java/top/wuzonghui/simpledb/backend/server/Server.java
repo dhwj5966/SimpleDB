@@ -46,6 +46,7 @@ public class Server {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("Server is running! Server listen to port: " + port);
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
                 10,
                 20,
@@ -60,12 +61,12 @@ public class Server {
                 threadPool.execute(runnable);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } finally {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+
             }
         }
     }

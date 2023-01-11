@@ -22,21 +22,16 @@ public class Encoder {
      * 将Package编码成字节数组。
      */
     public byte[] encode(Package pkg) {
-        if (pkg == null) {
-            return null;
-        }
-        byte[] result = new byte[1];
-        if (pkg.err != null) {
-            result[0] = FLAG_EXCEPTION;
+        if(pkg.getErr() != null) {
             Exception err = pkg.getErr();
-            String message = err.getMessage();
-            byte[] bytes = message.getBytes();
-            result = Bytes.concat(result, bytes);
+            String msg = "Intern server error!";
+            if(err.getMessage() != null) {
+                msg = err.getMessage();
+            }
+            return Bytes.concat(new byte[]{1}, msg.getBytes());
         } else {
-            result[0] = FLAG_DATA;
-            result = Bytes.concat(result, pkg.data);
+            return Bytes.concat(new byte[]{0}, pkg.getData());
         }
-        return result;
     }
 
     /**

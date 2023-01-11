@@ -6,7 +6,6 @@ import top.wuzonghui.simpledb.backend.tm.TransactionManagerImpl;
 import top.wuzonghui.simpledb.backend.utils.Panic;
 import top.wuzonghui.simpledb.backend.utils.ParseStringRes;
 import top.wuzonghui.simpledb.backend.utils.Parser;
-import top.wuzonghui.simpledb.backend.vm.Transaction;
 import top.wuzonghui.simpledb.backend.vm.VersionManager;
 import top.wuzonghui.simpledb.common.Error;
 
@@ -131,9 +130,9 @@ public class Table {
 
         while (position < raw.length) {
             long fieldUid = Parser.parseLong(Arrays.copyOfRange(raw, position, 8));
+            position += 8;
             Field field = Field.loadField(this, fieldUid);
             this.fields.add(field);
-            position += 8;
         }
         return this;
     }
@@ -156,6 +155,7 @@ public class Table {
         return this;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("{");
         sb.append(name).append(": ");
@@ -222,13 +222,13 @@ public class Table {
             //1.读出行数据
             byte[] raw = versionManager.read(xid, uid);
             if (raw == null) continue;
-            //2.将行数据解析成Map
+            //2.将原数据删除
+            versionManager.delete(xid, uid);
+            //3.将行数据解析成Map
             Map<String, Object> map = parseEntry(raw);
             map.put(field.fieldName, value);
-            //3.将map反解析为raw数据
+            //4.将map反解析为raw数据
             byte[] newRaw = entry2Raw(map);
-            //4.将原数据删除，新数据插入
-            versionManager.delete(xid, uid);
             long newUid = versionManager.insert(xid, newRaw);
 
             count++;
@@ -236,7 +236,7 @@ public class Table {
             //遍历Field，更新索引
             for (Field field1 : fields) {
                 if (field1.isIndexed()) {
-                    field1.insert(map.get(field.fieldName), newUid);
+                    field1.insert(map.get(field1.fieldName), newUid);
                 }
             }
         }
@@ -379,12 +379,23 @@ public class Table {
         Field whereField = null;
         boolean single = true;
         if (where == null) {
-
+            for (Field field : fields) {
+                if(field.isIndexed()) {
+                    whereField = field;
+                    break;
+                }
+            }
+            l0 = 0;
+            r0 = Long.MAX_VALUE;
+            single = true;
         } else {
             //where不为null，由于本数据库暂时只支持对单个字段的where语句，因此需要找到该字段。
             String fieldName = where.singleExp1.field;
             for (Field field : fields) {
                 if (field.fieldName.equals(fieldName)) {
+                    if(!field.isIndexed()) {
+                        throw Error.FieldNotIndexedException;
+                    }
                     whereField = field;
                     break;
                 }

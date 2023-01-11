@@ -36,7 +36,7 @@ public class Booter {
                 Panic.panic(Error.FileExistsException);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Panic.panic(e);
         }
         if (!file.canWrite() || !file.canRead()) {
             Panic.panic(Error.FileCannotRWException);
@@ -45,7 +45,6 @@ public class Booter {
     }
 
     public static Booter open(String path) {
-        removeBadTmp(path);
         removeBadTmp(path);
         File f = new File(path + BOOTER_SUFFIX);
         if (!f.exists()) {

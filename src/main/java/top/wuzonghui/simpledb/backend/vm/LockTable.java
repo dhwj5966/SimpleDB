@@ -136,6 +136,9 @@ public class LockTable {
     private void selectNewXID(long uid) {
         u2x.remove(uid);
         List<Long> list = wait.get(uid);
+
+        if (list == null) return;
+
         if (list != null) {
             while (list.size() > 0) {
                 long xid = list.remove(0);
@@ -152,7 +155,7 @@ public class LockTable {
             }
         }
 
-        if (list.isEmpty()) wait.remove(uid);
+        if (list != null && list.isEmpty()) wait.remove(uid);
     }
 
     /**
@@ -163,7 +166,14 @@ public class LockTable {
         if (list == null) {
             return;
         }
-        list.remove(id1);
+        Iterator<Long> i = list.iterator();
+        while(i.hasNext()) {
+            long e = i.next();
+            if(e == id1) {
+                i.remove();
+                break;
+            }
+        }
         if (list.size() == 0) {
             listMap.remove(id0);
         }
@@ -248,8 +258,16 @@ public class LockTable {
      * @Describe 判断uid是否在xid对应的value中。等价于xid是否已经持有了资源uid。
      * @return true:在。false：不在。
      */
-    private boolean isInList(Map<Long, List<Long>> x2u, long xid, long uid) {
-        if (!x2u.containsKey(xid)) return false;
-        return x2u.get(xid).contains(uid);
+    private boolean isInList(Map<Long, List<Long>> listMap, long xid, long uid) {
+        List<Long> l = listMap.get(xid);
+        if(l == null) return false;
+        Iterator<Long> i = l.iterator();
+        while(i.hasNext()) {
+            long e = i.next();
+            if(e == uid) {
+                return true;
+            }
+        }
+        return false;
     }
 }

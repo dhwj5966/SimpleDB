@@ -33,6 +33,7 @@ public class Executor {
             2.根据stat对象所属的类别，执行不同的逻辑。如果是begin，commit，abort，则由本方法执行。
             3.如果不是，就丢给execute2.
          */
+        System.out.println("Execute: " + new String(sql));
         Object stat = Parser.Parse(sql);
         if (Begin.class.isInstance(stat)) {
             if (xid != 0) {

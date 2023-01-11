@@ -33,7 +33,7 @@ public class Client {
         try {
             rt.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
         }
     }
 

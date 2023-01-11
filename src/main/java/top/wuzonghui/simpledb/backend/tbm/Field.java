@@ -336,15 +336,18 @@ public class Field {
                 //根据Object value，算出key。
                 long l = value2Uid(value1) + 1;
                 result.left = l;
+                break;
             case "<" :
                 result.left = 0;
                 Object value2 = string2Value(exp.value);
                 long l2 = value2Uid(value2);
                 result.right = l2 > 0 ? l2 - 1 : l2;
+                break;
             case "=" :
                 long l3 = value2Uid(string2Value(exp.value));
                 result.left = l3;
                 result.right = l3;
+                break;
         }
         return result;
     }
