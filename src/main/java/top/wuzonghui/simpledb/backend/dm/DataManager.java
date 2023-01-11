@@ -16,7 +16,6 @@ import top.wuzonghui.simpledb.backend.tm.TransactionManager;
 public interface DataManager {
     /**
      * 根据uid，读取对应的DataItem对象。
-     *
      * @param uid DataItem的uid，uid由2个部分组成：DataItem对象实际存储的Page的pageNumber和在page中的offset。
      * @return 读取到的DataItem对象。
      * @throws Exception

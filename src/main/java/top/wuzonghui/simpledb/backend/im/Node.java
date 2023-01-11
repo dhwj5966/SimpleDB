@@ -235,7 +235,8 @@ public class Node {
     /**
      * 找到从该节点出发，如果要寻找指定key，下一步要搜寻的节点。
      * @param key 要搜索的key。
-     * @return 返回一个SearchNextRes对象，该对象有2个field，long uid和long siblingUid。
+     * @return 返回下一步要搜索的节点的uid。
+     * 返回一个SearchNextRes对象，该对象有2个field，long uid和long siblingUid。
      * 如果返回结果的siblingUid字段为0，说明key在当前节点的子节点中，SearchNextRes对象的uid字段即下一步要搜寻的子节点的uid。
      * 如果返回结果的siblingUid字段不为0，说明key在当前节点的兄弟节点中，SearchNextRes对象的siblingUid字段即兄弟节点的uid。
      * @Instance 假设当前node的son-key部分存有以下值：uid1,7; uid2,11; uid3,20。node的兄弟节点的uid为uid4。
@@ -275,7 +276,7 @@ public class Node {
     }
 
     /**
-     * 在当前节点进行范围查找，范围是[leftKey, rightKey]。
+     * 在当前节点进行范围查找，范围是[leftKey, rightKey]。返回所有满足条件的uid。
      * 注意：约定如果rightKey大于等于该节点的最大key，则同时返回兄弟节点的uid，方便继续在下一个node中搜索。
      * @param leftKey 查询的key的左边界。
      * @param rightKey 查询的key的右边界。

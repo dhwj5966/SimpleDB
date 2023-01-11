@@ -129,7 +129,7 @@ public class Table {
         position += 8;
 
         while (position < raw.length) {
-            long fieldUid = Parser.parseLong(Arrays.copyOfRange(raw, position, 8));
+            long fieldUid = Parser.parseLong(Arrays.copyOfRange(raw, position, position + 8));
             position += 8;
             Field field = Field.loadField(this, fieldUid);
             this.fields.add(field);

@@ -112,7 +112,7 @@ public class BPlusTree {
     public List<Long> searchRange(long leftKey, long rightKey) throws Exception {
         //获取rootNode的uid。
         long rootUid = rootUid();
-        //找到leftKey所在的叶子节点。
+        //找到leftKey所在的叶子节点的uid。
         long leafUid = searchLeaf(rootUid, leftKey);
         List<Long> uids = new ArrayList<>();
         while (true) {
@@ -151,7 +151,7 @@ public class BPlusTree {
 
 
     /**
-     * @Describe 更新bootDataItem中根节点的uid。
+     * @Describe 更新bootDataItem中根节点的uid。因为更新RootNode，一定是RootNode分裂，所以一定是有两个子节点。
      * @param left 根节点的左子节点。
      * @param right 根节点的右子节点。
      * @param rightKey
@@ -270,6 +270,7 @@ public class BPlusTree {
             Node node = Node.loadNode(this, nodeUid);
             Node.InsertAndSplitRes iasr = node.insertAndSplit(uid, key);
             node.release();
+
             if (iasr.siblingUid != 0) {
                 nodeUid = iasr.siblingUid;
             } else {
