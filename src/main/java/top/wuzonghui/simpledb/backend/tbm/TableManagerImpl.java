@@ -86,13 +86,13 @@ public class TableManagerImpl implements TableManager {
             for (Table tb : tableCache.values()) {
                 sb.append(tb.toString()).append("\n");
             }
-            List<Table> t = xidTableCache.get(xid);
-            if(t == null) {
-                return "\n".getBytes();
-            }
-            for (Table tb : t) {
-                sb.append(tb.toString()).append("\n");
-            }
+//            List<Table> t = xidTableCache.get(xid);
+//            if(t == null) {
+//                return "\n".getBytes();
+//            }
+//            for (Table tb : t) {
+//                sb.append(tb.toString()).append("\n");
+//            }
             return sb.toString().getBytes();
         } finally {
             lock.unlock();
@@ -173,6 +173,11 @@ public class TableManagerImpl implements TableManager {
         }
         int count = table.delete(xid, delete);
         return ("delete " + count + " raw").getBytes();
+    }
+
+    @Override
+    public byte[] drop(long xid, Drop stat) {
+        return new byte[0];
     }
 
     /**

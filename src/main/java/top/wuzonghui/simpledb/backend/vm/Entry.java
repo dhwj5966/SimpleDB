@@ -79,6 +79,10 @@ public class Entry {
         return Bytes.concat(XMIN, XMAX, data);
     }
 
+    public boolean dataItemIsNull() {
+        return this.dataItem == null;
+    }
+
     /**
      * 返回该条Entry的data部分。
      * @return 以拷贝byte数组的形式返回。

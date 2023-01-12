@@ -17,7 +17,7 @@ public interface DataManager {
     /**
      * 根据uid，读取对应的DataItem对象。
      * @param uid DataItem的uid，uid由2个部分组成：DataItem对象实际存储的Page的pageNumber和在page中的offset。
-     * @return 读取到的DataItem对象。
+     * @return 读取到的DataItem对象。如果DataItem已经被设为逻辑删除，则返回null。
      * @throws Exception
      */
     DataItem read(long uid) throws Exception;

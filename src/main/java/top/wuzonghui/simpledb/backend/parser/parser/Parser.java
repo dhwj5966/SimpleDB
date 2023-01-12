@@ -101,10 +101,14 @@ public class Parser {
 
     private static Object parseShow(Tokenizer tokenizer) throws Exception {
         String tmp = tokenizer.peek();
-        if("".equals(tmp)) {
-            return new Show();
+        if (!"tables".equals(tmp)) {
+            throw Error.InvalidCommandException;
         }
-        throw Error.InvalidCommandException;
+        tokenizer.pop();
+        if (!"".equals(tokenizer.peek())) {
+            throw Error.InvalidCommandException;
+        }
+        return new Show();
     }
 
     private static Object parseUpdate(Tokenizer tokenizer) throws Exception {
@@ -152,6 +156,12 @@ public class Parser {
         }
         delete.tableName = tableName;
         tokenizer.pop();
+
+        String tmp = tokenizer.peek();
+        if("".equals(tmp)) {
+            delete.where = null;
+            return delete;
+        }
 
         delete.where = parseWhere(tokenizer);
         return delete;

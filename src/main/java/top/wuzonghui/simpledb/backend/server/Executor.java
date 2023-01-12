@@ -4,7 +4,6 @@ import top.wuzonghui.simpledb.backend.parser.parser.Parser;
 import top.wuzonghui.simpledb.backend.parser.parser.statement.*;
 import top.wuzonghui.simpledb.backend.tbm.BeginRes;
 import top.wuzonghui.simpledb.backend.tbm.TableManager;
-import top.wuzonghui.simpledb.backend.vm.Transaction;
 import top.wuzonghui.simpledb.common.Error;
 
 /**
@@ -86,8 +85,10 @@ public class Executor {
                 res = tbm.insert(xid, (Insert)stat);
             } else if(Delete.class.isInstance(stat)) {
                 res = tbm.delete(xid, (Delete)stat);
-            } else if(Update.class.isInstance(stat)) {
-                res = tbm.update(xid, (Update)stat);
+            } else if (Update.class.isInstance(stat)) {
+                res = tbm.update(xid, (Update) stat);
+            } else if (Drop.class.isInstance(stat)) {
+                res = tbm.drop(xid, (Drop) stat);
             }
             return res;
         } catch (Exception e1) {

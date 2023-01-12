@@ -188,7 +188,9 @@ public class VersionManagerImpl extends AbstractCache<Entry> implements VersionM
                 return null;
             }
         } finally {
-            entry.release();
+            if (!entry.dataItemIsNull()) {
+                entry.release();
+            }
         }
     }
 

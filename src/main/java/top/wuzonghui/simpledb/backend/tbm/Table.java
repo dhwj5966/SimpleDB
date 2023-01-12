@@ -254,12 +254,46 @@ public class Table {
         //找到那些满足where条件的数据行的uid。
         List<Long> uids = parseWhere(read.where);
         StringBuilder sb = new StringBuilder();
+        String[] readField = read.fields;
+        List<Field> readField0 = new ArrayList<>();
+
+
+        int len = 0;
+
+        //如果是select *,则说明包含了所有字段
+        if (read.fields[0].equals("*")) {
+            readField0 = fields;
+            for (Field field : fields) {
+                sb.append(field.fieldName).append("\t");
+                len += field.fieldName.length() + 2;
+            }
+        } else {
+            for (String readFieldName : readField) {
+                sb.append(readFieldName).append("\t");
+                len += readFieldName.length() + 2;
+                for (Field field : fields) {
+                    if (field.fieldName.equals(readFieldName)) {
+                        readField0.add(field);
+                    }
+                }
+            }
+        }
+        sb.append("\n");
+        for (int i = 0; i < len; i++) {
+            sb.append("-");
+        }
+        sb.append("\n");
+        boolean isEmptySet = true;
         for (Long uid : uids) {
             //读出数据行
-            byte[] raw = ((TableManagerImpl)tbm).vm.read(xid, uid);
+            byte[] raw = ((TableManagerImpl) tbm).vm.read(xid, uid);
             if (raw == null) continue;
+            isEmptySet = false;
             Map<String, Object> entry = parseEntry(raw);
-            sb.append(printEntry(entry)).append("\n");
+            sb.append(printEntry(entry, readField0)).append("\n");
+        }
+        if (isEmptySet) {
+            return "Empty Set";
         }
         return sb.toString();
     }
@@ -306,7 +340,20 @@ public class Table {
         return map;
     }
 
+    private String printEntry(Map<String, Object> entry, List<Field> readField0) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < readField0.size(); i++) {
+            Field field = readField0.get(i);
+            String value = field.printValue(entry.get(field.fieldName));
+            sb.append(value);
+            if (i != readField0.size() - 1) {
+                sb.append("\t");
+            }
+        }
+        return sb.toString();
+    }
 
+    @Deprecated
     private String printEntry(Map<String, Object> entry) {
         StringBuilder sb = new StringBuilder("[");
         for (int i = 0; i < fields.size(); i++) {

@@ -24,12 +24,29 @@ public class topTest {
     public void test() throws Exception {
         String path = "C:\\Users\\windows\\Desktop\\test";
         Executor executor = openDB(path);
+        /*
+            bug汇总：
+            1.begin一个事务后，还没commit就直接关闭程序，则属于异常关闭，需要走恢复例程，此后再select *,会报错。
+         */
 
-        executor.execute("create table users id int32, name string,(index id name)".getBytes());
 
-        executor.execute("insert into users values 5 \"wzh\"".getBytes());
+        String[] sqls = {
+//                "create table users id int32,name string(index id name)",
+//                "begin",
+//                "insert into users values 6 \"wyy\"",
+                "select * from users"
 
-        byte[] execute = executor.execute("select name from users where id < 10".getBytes());
+        };
+
+        for (String sql : sqls) {
+            execute0(executor, sql);
+        }
+
+
+    }
+
+    private void execute0(Executor executor, String sql) throws Exception {
+        byte[] execute = executor.execute(sql.getBytes());
         System.out.println(new String(execute));
     }
 

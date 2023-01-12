@@ -67,4 +67,14 @@ public interface TableManager {
         Booter booter = Booter.open(path);
         return new TableManagerImpl(vm, dm, booter);
     }
+
+    /**
+     * 删除表要符合一下规则，只要有其他事务对表有任何形式的占用，则无法删除表。
+     * 什么叫其他事务对表的占用？即
+     *
+     * @param xid
+     * @param stat
+     * @return
+     */
+    byte[] drop(long xid, Drop stat);
 }

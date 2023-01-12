@@ -44,6 +44,9 @@ public class Visibility {
      * @return true:可见。false：不可见。
      */
     public static boolean isVisible(TransactionManager tm, Transaction t, Entry e) {
+        if (e == null || e.dataItemIsNull()) {
+            return false;
+        }
         if (t.level == Transaction.READCOMMITTED) {
             return readCommitted(tm, t, e);
         } else {
